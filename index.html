@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF4E8">
+<title>Bingo para mi amor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23F06C9B' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chewy&family=Mali:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/*//////////////////////////////////////////////////////////////
+//////////////////////  VARIABLES Y BASE  //////////////////////
+//////////////////////////////////////////////////////////////*/
+:root{
+  --cream:#FFF6EE; --cream-2:#FFE9D6; --paper:#FFFBF7;
+  --pink:#FFD9E7; --pink-2:#FFB5D0; --line:#F5A9C6;
+  --rose:#F0679E; --rose-d:#C23F7A; --ink:#5E3552; --muted:#A27F96;
+  --sky:#D3EDFC; --sky-2:#A9DAF7; --sky-line:#9DCDEC; --sky-d:#3F88C2; --sky-ink:#2B6AA0;
+  --lav:#E8DCF8; --lav-line:#CDB8F0; --lav-d:#8E6FD6;
+  --blue:#CBE8FB; --yellow:#FFE08A; --peach:#FFE0C2; --peach-d:#B5692B;
+  --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.56,.64,1);
+  --font-t:'Chewy','Baloo 2','Comic Sans MS','Chalkboard SE',cursive;
+  --font-b:'Mali','Comic Sans MS','Chalkboard SE','Segoe Print',ui-rounded,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,label,a{touch-action:manipulation}
+.input{font-size:16px} /* 16px evita el zoom automático de iOS al enfocar */
+html{background:var(--cream)}
+body{font-family:var(--font-b);color:var(--ink);min-height:100dvh;overflow-x:hidden;line-height:1.35;
+  background:var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Ccircle cx='18' cy='22' r='3' fill='%23FFD9E7'/%3E%3Ccircle cx='84' cy='64' r='3' fill='%23D3EDFC'/%3E%3Cpath d='M96 18l1.8 5.2L103 25l-5.2 1.8L96 32l-1.8-5.2L89 25l5.2-1.8z' fill='%23FFE9A8'/%3E%3Ccircle cx='40' cy='98' r='2.4' fill='%23D3EDFC'/%3E%3Ccircle cx='110' cy='104' r='2.4' fill='%23FFD9E7'/%3E%3C/svg%3E")}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+.app{position:relative;max-width:460px;margin:0 auto;padding:max(26px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left))}
+@media (max-width:360px){.board{gap:8px}.cell .t{font-size:12.5px}.title{max-width:290px}.intro{padding:16px 16px 18px}.intro .hi{font-size:20px}.intro p{font-size:14px}}
+.ico{width:1em;height:1em;display:block}
+[hidden]{display:none!important}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  ENCABEZADO  ////////////////////////////
+//////////////////////////////////////////////////////////////*/
+.hero{position:relative;text-align:center;padding:14px 0 6px}
+.title{display:block;width:100%;max-width:330px;margin:0 auto;overflow:visible}
+.squig{display:block;margin:6px auto 0;width:150px;height:10px;color:var(--sky-2)}
+.intro{position:relative;margin:18px auto 0;max-width:360px;padding:18px 20px 20px;background:var(--rose);color:#fff;border-radius:30px 26px 32px 24px / 26px 32px 24px 30px;box-shadow:0 4px 0 var(--rose-d);text-align:left}
+.intro .hi{display:block;text-align:center;font-family:var(--font-t);font-weight:400;font-size:23px;letter-spacing:.6px;line-height:1.1;margin-bottom:10px;overflow-wrap:anywhere}
+.intro p{font-weight:500;font-size:14.5px;line-height:1.5}
+.intro p+p{margin-top:8px}
+.how{margin:16px auto 0;max-width:340px;font-size:13px;color:var(--sky-ink);font-weight:500}
+.how b{display:block;font-family:var(--font-t);font-weight:400;font-size:15px;letter-spacing:.8px;color:var(--rose);margin-bottom:2px}
+.deco{position:absolute;pointer-events:none}
+.deco svg{width:100%;height:100%;display:block}
+.d1{width:28px;height:28px;left:2px;top:22px;color:var(--pink-2);animation:float 4.6s ease-in-out infinite alternate}
+.d2{width:22px;height:22px;right:6px;top:10px;color:var(--yellow);animation:twinkle 2.6s ease-in-out infinite}
+.d3{width:18px;height:18px;left:34px;top:84px;color:var(--sky-2);animation:twinkle 3.2s ease-in-out -1s infinite}
+.d4{width:24px;height:24px;right:0;top:94px;color:var(--pink-2);animation:float 5.4s ease-in-out -2s infinite alternate}
+.d5{width:58px;height:36px;left:-8px;top:118px;color:var(--sky);animation:drift 6s ease-in-out infinite alternate}
+.d6{width:50px;height:31px;right:-6px;top:140px;color:var(--sky);animation:drift 7s ease-in-out -2s infinite alternate-reverse}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(9px)}}
+@keyframes float{from{transform:translateY(0) rotate(-8deg)}to{transform:translateY(-8px) rotate(8deg)}}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.7) rotate(18deg)}}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  PROGRESO  //////////////////////////////
+//////////////////////////////////////////////////////////////*/
+.progress{margin:22px 0 16px}
+.progress-top{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--muted);margin-bottom:7px;font-weight:600}
+.progress-top strong{font-family:var(--font-t);font-weight:400;font-size:20px;color:var(--rose)}
+.bar{height:16px;border-radius:99px;background:#fff;border:2.5px solid var(--sky-line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--rose);transition:width 1s var(--ease)}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  TABLERO  ///////////////////////////////
+//////////////////////////////////////////////////////////////*/
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.cell{position:relative;min-height:clamp(128px,35vw,152px);min-width:0;border-radius:var(--r);rotate:var(--rot,0deg);background:var(--pink);border:2.5px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;padding:9px 6px 8px;text-align:center;
+  transition:transform .4s var(--spring),background .5s var(--ease),border-color .5s var(--ease)}
+.cell.enter{animation:rise .85s var(--ease) both;animation-delay:calc(var(--i)*70ms)}
+.cell .num{position:absolute;left:9px;top:6px;font-family:var(--font-t);font-size:12px;color:var(--rose);opacity:.75}
+.stk{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin-top:0;transition:transform .5s var(--spring)}
+.ill{width:100%;height:100%;display:block;overflow:visible}
+.stk .ill{width:39px;height:39px}
+.cell .t{font-family:var(--font-t);font-size:13.5px;line-height:1.05;letter-spacing:.2px;color:var(--rose-d)}
+.pill{width:90%;height:24px;border-radius:99px;background:#fff;display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:700;color:#B98BA0;transition:background .5s var(--ease),color .5s var(--ease)}
+.pill .ico{width:12px;height:12px}
+.cell:active{transform:scale(.94)}
+@media (hover:hover){.cell:hover{transform:translateY(-4px) rotate(-1.5deg)}.cell:hover .stk{transform:scale(1.12) rotate(8deg)}}
+.s-revision{background:var(--peach);border-color:#F2C089}
+.s-revision .pill{background:#fff;color:var(--peach-d)}
+.s-aprobada{background:var(--pink-2);border-color:#EE8BA8}
+.s-aprobada .pill{background:var(--rose);color:#fff}
+.s-aprobada .stk{background:#fff}
+.s-rechazada{background:#FFE6EA;border:2.5px dashed var(--rose)}
+.s-rechazada .pill{background:var(--rose);color:#fff}
+/* casillas celestes (intercaladas con las rosas) */
+.cell.sky{background:var(--sky);border-color:var(--sky-line)}
+.cell.sky .stk{color:var(--sky-d)}
+.cell.sky .t{color:var(--sky-ink)}
+.cell.sky .num{color:var(--sky-d)}
+.cell.sky .pill{color:#7FA3BD}
+.cell.sky.s-revision{background:var(--peach);border-color:#F2C089}
+.cell.sky.s-revision .pill{color:var(--peach-d)}
+.cell.sky.s-revision .t{color:var(--peach-d)}
+.cell.sky.s-revision .stk{color:var(--peach-d)}
+.cell.sky.s-aprobada{background:var(--sky-2);border-color:#7FBCE6}
+.cell.sky.s-aprobada .pill{background:var(--sky-d);color:#fff}
+.cell.sky.s-rechazada{background:#FFE6EA;border:2.5px dashed var(--rose)}
+.cell.sky.s-rechazada .t{color:var(--rose-d)}
+.cell.sky.s-rechazada .stk{color:var(--rose)}
+.cell.sky.s-rechazada .pill{background:var(--rose);color:#fff}
+.stamp{animation:stamp .8s var(--spring)}
+.hl{animation:hl 1.3s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes stamp{0%{transform:scale(1.22) rotate(-6deg)}55%{transform:scale(.94) rotate(2deg)}100%{transform:none}}
+@keyframes hl{0%,100%{transform:scale(1)}35%{transform:scale(1.09) rotate(-2deg)}65%{transform:scale(1.05) rotate(2deg)}}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  PREMIOS  ///////////////////////////////
+//////////////////////////////////////////////////////////////*/
+.section-title{font-family:var(--font-t);font-weight:400;font-size:28px;letter-spacing:.6px;color:var(--rose);margin:36px 0 2px;text-align:center}
+.section-sub{font-size:13px;color:var(--sky-ink);font-weight:500;margin:0 auto 16px;text-align:center;max-width:320px}
+.prizes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prize{perspective:800px;height:92px;padding:0;rotate:var(--rot,0deg)}
+.prize-in{position:relative;width:100%;height:100%;transition:transform .9s var(--ease);transform-style:preserve-3d}
+.prize.open .prize-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:var(--r);backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 12px;text-align:center}
+.front{background:var(--sky);border:2.5px solid var(--sky-line);color:var(--sky-ink);font-family:var(--font-t);font-size:17px;letter-spacing:.4px}
+.front .ico{width:22px;height:22px}
+.back{background:var(--pink-2);border:2.5px solid #EE8BA8;color:var(--ink);transform:rotateY(180deg);font-weight:700;font-size:13.5px;line-height:1.15}
+.back small{font-family:var(--font-t);font-weight:400;font-size:13px;letter-spacing:.6px;color:var(--rose-d)}
+
+.coupon{position:relative;margin-top:20px;border-radius:30px;padding:26px 22px;text-align:center;background:var(--sky);border:2.5px dashed var(--sky-line);color:var(--sky-ink);transition:background .8s var(--ease),border-color .8s var(--ease),color .8s var(--ease)}
+.coupon .ico{width:28px;height:28px;margin:0 auto 6px}
+.coupon h3{font-family:var(--font-t);font-weight:400;font-size:24px;letter-spacing:.5px}
+.coupon p{font-size:13.5px;margin-top:2px;font-weight:500}
+.coupon .dash{border-top:2.5px dashed currentColor;opacity:.35;margin:14px 0}
+.coupon .when-open{display:none}
+.coupon.open{background:none;border-color:transparent;padding:0;color:var(--rose-d)}
+.coupon.open .when-locked{display:none}
+.coupon.open .when-open{display:block;animation:fadeUp .9s var(--ease)}
+.cup{display:block;width:100%;height:auto;overflow:visible}
+.cup-box{margin-top:14px}
+.coupon .cup-box{margin-top:0}
+.hint{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:10px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.demo-tag{margin-top:26px;text-align:center;font-size:12px;color:var(--muted)}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  ESCENA INFERIOR  ///////////////////////
+//////////////////////////////////////////////////////////////*/
+.scene-wrap{margin:30px -16px 0;line-height:0}
+.scene{display:block;width:100%;height:auto;overflow:visible}
+.crit{animation:bob 3.2s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  MODALES  ///////////////////////////////
+//////////////////////////////////////////////////////////////*/
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(107,53,80,.4);opacity:0;pointer-events:none;transition:opacity .4s var(--ease);display:flex;align-items:flex-end;justify-content:center}
+.overlay.show{opacity:1;pointer-events:auto}
+.overlay.center{align-items:center;padding:20px}
+#modal{width:100%;max-width:460px;max-height:92dvh;overflow:auto;background:var(--paper)}
+#modal.sheet{border-radius:36px 32px 0 0 / 30px 34px 0 0;border:3px solid var(--line);border-bottom:0;padding:12px 22px calc(26px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .6s var(--ease)}
+.overlay.show #modal.sheet{transform:none}
+#modal.dialog{border-radius:36px 30px 34px 28px / 30px 36px 28px 34px;border:3px solid var(--line);padding:28px 24px 24px;text-align:center;transform:scale(.85) translateY(24px) rotate(-2deg);opacity:0;transition:transform .7s var(--spring),opacity .35s var(--ease)}
+.overlay.show #modal.dialog{transform:none;opacity:1}
+#modal.photo{background:none;border:0;padding:0;border-radius:28px;overflow:visible;transform:scale(.9);opacity:0;transition:transform .6s var(--spring),opacity .3s}
+.overlay.show #modal.photo{transform:none;opacity:1}
+#modal.photo img{display:block;width:100%;max-height:82dvh;object-fit:contain;border-radius:28px;border:4px solid #fff;background:var(--pink)}
+
+.handle{width:46px;height:6px;border-radius:9px;background:var(--line);opacity:.6;margin:0 auto 14px}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.chip{font-family:var(--font-t);font-size:15px;letter-spacing:.4px;background:var(--pink);color:var(--rose-d);padding:3px 14px;border-radius:99px;border:2px solid var(--line)}
+.x{width:44px;height:44px;border-radius:50%;background:#fff;border:2px solid var(--line);color:var(--rose);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .3s var(--spring)}
+.x:active{transform:scale(.88) rotate(10deg)}
+.sheet-ico{width:76px;height:76px;border-radius:50%;background:#fff;border:2.5px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.sheet-ico .ill{width:58px;height:58px}
+#modal h3{font-family:var(--font-t);font-weight:400;font-size:27px;line-height:1.05;letter-spacing:.4px;color:var(--rose-d)}
+.muted{color:var(--muted);font-size:14.5px;margin-top:6px;font-weight:500}
+.proof{display:block;width:100%;max-height:260px;object-fit:cover;border-radius:26px;border:4px solid #fff;margin-top:16px;background:var(--pink);animation:fadeUp .6s var(--ease)}
+.status{display:flex;align-items:center;gap:8px;margin-top:14px;padding:11px 14px;border-radius:20px;font-size:13.5px;font-weight:600}
+.status .ico{width:18px;height:18px;flex:none}
+.status.rev{background:var(--peach);color:#8A4D1F}
+.status.ok{background:var(--pink-2);color:var(--ink)}
+.status.no{background:#FFE6EA;color:var(--rose-d);border:2px dashed var(--rose)}
+.pick{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;padding:15px;border-radius:24px;border:2.5px dashed var(--rose);color:var(--rose);font-weight:700;cursor:pointer;background:#fff;transition:background .3s,transform .3s var(--spring)}
+.pick:active{transform:scale(.97)}
+.pick .ico{width:22px;height:22px}
+@media (hover:hover){.pick:hover{background:var(--pink)}}
+.btn{display:block;width:100%;margin-top:14px;padding:13px 18px;border-radius:99px;background:var(--rose);color:#fff;font-family:var(--font-t);font-size:20px;letter-spacing:.6px;box-shadow:0 5px 0 var(--rose-d);transition:transform .2s var(--ease),box-shadow .2s var(--ease),opacity .3s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--rose-d)}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.btn.soft{background:var(--pink);color:var(--rose-d);box-shadow:0 5px 0 var(--line)}
+.btn.sm{display:inline-flex;align-items:center;justify-content:center;width:auto;min-height:44px;margin:0 0 5px;padding:8px 20px;font-size:17px;box-shadow:0 4px 0 var(--rose-d)}
+.btn.sm.soft{box-shadow:0 4px 0 var(--line)}
+
+.burst{width:76px;height:76px;margin:0 auto 10px;color:var(--rose);animation:beat 1.4s var(--ease) infinite}
+.burst svg{width:100%;height:100%;display:block}
+@keyframes beat{0%,100%{transform:scale(1)}20%{transform:scale(1.16)}40%{transform:scale(.96)}}
+.dialog h3{font-size:30px}
+.won{list-style:none;padding:0;margin:16px 0 4px;display:grid;gap:9px}
+.won li{background:var(--pink-2);border:2.5px solid #EE8BA8;border-radius:24px 20px 26px 18px / 20px 26px 18px 24px;padding:10px 14px;display:flex;flex-direction:column;gap:1px;animation:fadeUp .7s var(--ease) both}
+.won li span{font-family:var(--font-t);font-size:13px;letter-spacing:.6px;color:var(--rose-d)}
+.won li strong{font-size:15.5px;font-weight:700}
+.won-item{margin-top:16px;text-align:center;animation:fadeUp .7s var(--ease) both}
+.won-item .btn{margin-top:6px}
+textarea.input{display:block;margin-top:14px;font-size:16px;min-height:112px;resize:none;line-height:1.35}
+.resumen{white-space:pre-wrap;background:#fff;border-radius:18px;padding:9px 12px;font-size:13px;margin-top:8px;font-weight:500;color:var(--ink)}
+.cup-mini{width:112px;flex:none}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:80;transform:translate(-50%,30px);opacity:0;background:var(--rose-d);color:#fff;padding:11px 20px;border-radius:99px;font-size:14px;font-weight:600;max-width:90vw;text-align:center;transition:transform .5s var(--spring),opacity .3s;pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+canvas#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  PANEL ADMIN  ///////////////////////////
+//////////////////////////////////////////////////////////////*/
+#admin{padding-bottom:50px}
+.gate{margin-top:40px;text-align:center}
+.gate h2{font-family:var(--font-t);font-weight:400;font-size:32px;color:var(--rose)}
+.gate form{margin-top:18px;display:grid;gap:10px}
+.input{width:100%;padding:14px 16px;border-radius:22px;border:2.5px solid var(--line);background:#fff;font:inherit;font-weight:500;color:var(--ink);outline:none;transition:border-color .3s}
+.input:focus{border-color:var(--rose)}
+.gate .err{color:var(--rose);font-size:14px;min-height:20px;font-weight:600}
+.adm-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:6px}
+.adm-head h2{font-family:var(--font-t);font-weight:400;font-size:34px;color:var(--rose)}
+.adm-head span{font-size:14px;color:var(--muted);font-weight:600}
+.adm-group{margin:22px 0 10px;font-family:var(--font-t);font-size:15px;letter-spacing:.8px;color:var(--sky-d)}
+.item{background:var(--pink);border:2.5px solid var(--line);border-radius:30px 26px 32px 24px / 26px 32px 24px 30px;padding:14px;margin-bottom:12px;animation:fadeUp .6s var(--ease) both}
+.item-top{display:flex;gap:12px;align-items:center}
+.thumb{width:70px;height:70px;border-radius:22px;border:3px solid #fff;object-fit:cover;background:var(--pink-2);flex:none;cursor:zoom-in;transition:transform .3s var(--spring)}
+.thumb:active{transform:scale(.93)}
+.item-info{min-width:0;flex:1}
+.item-info b{display:block;font-family:var(--font-t);font-weight:400;font-size:18px;line-height:1.05;color:var(--rose-d);letter-spacing:.3px}
+.item-info small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;font-weight:500}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:99px;margin-top:6px}
+.tag.rev{background:var(--peach);color:#8A4D1F}.tag.ok{background:var(--pink-2);color:var(--ink)}.tag.no{background:#fff;color:var(--rose)}
+.item .btn.soft{background:#fff}
+.item-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.reject-box{margin-top:12px;display:grid;gap:8px}
+.reject-box .input{padding:12px 14px;font-size:16px}
+.empty{background:#fff;border:2.5px dashed var(--line);border-radius:26px;padding:18px;text-align:center;color:var(--muted);font-size:14px;font-weight:500}
+.back-link{display:inline-block;margin-top:26px;font-size:14px;color:var(--sky-d);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+
+<body>
+<!--//////////////////////////////////////////////////////////////
+//////////////////////  VISTA DE ELLA  ///////////////////////////
+//////////////////////////////////////////////////////////////-->
+<main class="app" id="player">
+  <header class="hero">
+    <div class="deco d1" data-svg="heart"></div>
+    <div class="deco d2" data-svg="sparkle"></div>
+    <div class="deco d3" data-svg="sparkle"></div>
+    <div class="deco d4" data-svg="heart"></div>
+    <div class="deco d5" data-svg="cloud"></div>
+    <div class="deco d6" data-svg="cloud"></div>
+
+    <svg class="title" viewBox="0 0 340 104" role="img" aria-label="Bingo">
+      <g font-family="Chewy,'Baloo 2','Comic Sans MS',cursive" font-size="92" stroke-linejoin="round" stroke-linecap="round" paint-order="stroke fill">
+        <text x="12" y="88" textLength="318" lengthAdjust="spacingAndGlyphs" fill="#F4B6CA" stroke="#F4B6CA" stroke-width="10"><tspan>BINGO</tspan></text>
+        <text x="8" y="82" textLength="318" lengthAdjust="spacingAndGlyphs" stroke="#fff" stroke-width="10">
+          <tspan fill="#F06C9B">B</tspan><tspan fill="#B79CED">I</tspan><tspan fill="#F06C9B">N</tspan><tspan fill="#8CC9F0">G</tspan><tspan fill="#F06C9B">O</tspan>
+        </text>
+      </g>
+    </svg>
+    <svg class="squig" viewBox="0 0 150 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M3 5q9-8 18 0t18 0 18 0 18 0 18 0 18 0 18 0 14 0"/></svg>
+
+    <div class="intro">
+      <span class="hi">HOLA AMOOOOOOOOOOR, TEAMO.</span>
+      <p>Te hice un bingo para esta semana. Por cada cosa que completes del bingo (con pruebas: si no hay pruebas no cuenta, y si las pruebas son feik, voy a llorar), tenés hasta el sábado para completar y reclamar los premios.</p>
+      <p>Cada vez que desbloquees un premio, guardá el cupón para poder reclamarlo.</p>
+      <p>Te amo si no completás todo te vas a perder el premio mayor jejejejewjejj</p>
+    </div>
+    <p class="how"><b>CÓMO SE JUEGA:</b>Tocá un reto y subí una foto de lo que hiciste, yo confirmo si cuenta y así vas completando una fila, una columna o una diagonal para ir ganando los premios (no muchas expectativas porque I'm broke af).</p>
+  </header>
+
+  <section class="progress" aria-live="polite">
+    <div class="progress-top"><span>Retos aprobados</span><strong id="pcount">0 de 9</strong></div>
+    <div class="bar"><i id="pbar"></i></div>
+  </section>
+
+  <section class="board" id="board" aria-label="Tablero de bingo"></section>
+
+  <h2 class="section-title">Premios</h2>
+  <p class="section-sub">Tocá uno: si está cerrado te muestro qué retos lo abren, y si ya lo ganaste se abre su cupón.</p>
+  <section class="prizes" id="prizes"></section>
+
+  <section class="coupon" id="coupon">
+    <div class="when-locked">
+      <div data-ico="lock"></div>
+      <h3>Premio mayor</h3>
+      <p>Cumplí los 9 retos y se abre.</p>
+    </div>
+    <div class="when-open">
+      <div class="cup-box" id="coupon-art"></div>
+      <button class="btn" data-dl="mayor">Descargar cupón</button>
+    </div>
+  </section>
+
+  <p class="demo-tag" id="demo-tag" hidden>Modo demo: los datos quedan solo en este navegador.</p>
+
+  <!--////////////////  ESCENA: ARCOIRIS Y AMIGUITOS  ////////////////-->
+  <div class="scene-wrap">
+    <svg class="scene" viewBox="0 0 400 214" aria-hidden="true">
+      <defs>
+        <g id="face">
+          <circle cx="-5" cy="0" r="1.9" fill="#6B3550"/><circle cx="5" cy="0" r="1.9" fill="#6B3550"/>
+          <ellipse cx="-9.5" cy="4" rx="3.2" ry="2" fill="#FF9DB5"/><ellipse cx="9.5" cy="4" rx="3.2" ry="2" fill="#FF9DB5"/>
+          <path d="M-2.2 3.4q2.2 2.4 4.4 0" fill="none" stroke="#6B3550" stroke-width="1.3" stroke-linecap="round"/>
+        </g>
+      </defs>
+      <!-- arcoiris -->
+      <g fill="none" stroke-width="11">
+        <path d="M96 160A104 104 0 0 1 304 160" stroke="#FF9AA2"/>
+        <path d="M107 160A93 93 0 0 1 293 160" stroke="#FFC59B"/>
+        <path d="M118 160A82 82 0 0 1 282 160" stroke="#FFE59B"/>
+        <path d="M129 160A71 71 0 0 1 271 160" stroke="#BFE8B5"/>
+        <path d="M140 160A60 60 0 0 1 260 160" stroke="#B3DBF6"/>
+        <path d="M151 160A49 49 0 0 1 249 160" stroke="#D3C3F1"/>
+      </g>
+      <!-- nubes de las puntas -->
+      <g fill="#fff">
+        <circle cx="100" cy="162" r="18"/><circle cx="122" cy="153" r="22"/><circle cx="146" cy="162" r="18"/><rect x="100" y="162" width="46" height="18" rx="9"/>
+        <circle cx="300" cy="162" r="18"/><circle cx="278" cy="153" r="22"/><circle cx="254" cy="162" r="18"/><rect x="254" y="162" width="46" height="18" rx="9"/>
+      </g>
+      <!-- banco de nubes -->
+      <g fill="#CBE8FB">
+        <circle cx="20" cy="194" r="34"/><circle cx="72" cy="200" r="30"/><circle cx="132" cy="196" r="36"/><circle cx="196" cy="202" r="32"/>
+        <circle cx="262" cy="196" r="36"/><circle cx="326" cy="200" r="30"/><circle cx="382" cy="194" r="34"/><rect x="0" y="196" width="400" height="18"/>
+      </g>
+      <!-- amiguito frutilla -->
+      <g class="crit" style="--d:0s"><g transform="translate(42 142)">
+        <path d="M0 24C-18 24-24 6-22-6C-20-16 20-16 22-6C24 6 18 24 0 24Z" fill="#FF8FA8"/>
+        <path d="M-12-12L-6-21L0-13L6-21L12-12Z" fill="#8CD39A"/>
+        <circle cx="-14" cy="6" r="1.2" fill="#FFE3E8"/><circle cx="14" cy="8" r="1.2" fill="#FFE3E8"/><circle cx="0" cy="17" r="1.2" fill="#FFE3E8"/>
+        <use href="#face" transform="translate(0 4) scale(.95)"/>
+      </g></g>
+      <!-- amiguito estrella -->
+      <g class="crit" style="--d:-.8s"><g transform="translate(104 140)">
+        <polygon points="0,-22 5.9,-8.1 20.9,-6.8 9.5,3.1 12.9,17.8 0,10 -12.9,17.8 -9.5,3.1 -20.9,-6.8 -5.9,-8.1" fill="#FFE08A" stroke="#FFE08A" stroke-width="6" stroke-linejoin="round"/>
+        <use href="#face" transform="translate(0 2) scale(.9)"/>
+      </g></g>
+      <!-- amiguito hongo -->
+      <g class="crit" style="--d:-1.6s"><g transform="translate(296 140)">
+        <rect x="-11" y="2" width="22" height="22" rx="9" fill="#FFF0DC"/>
+        <path d="M-25 4A25 23 0 0 1 25 4Z" fill="#FFB3C6"/>
+        <circle cx="-11" cy="-8" r="3.6" fill="#fff"/><circle cx="6" cy="-13" r="3" fill="#fff"/><circle cx="14" cy="-3" r="2.6" fill="#fff"/>
+        <use href="#face" transform="translate(0 13) scale(.8)"/>
+      </g></g>
+      <!-- amiguito flor -->
+      <g class="crit" style="--d:-2.4s"><g transform="translate(358 142)">
+        <g fill="#F9A8D4"><circle cx="0" cy="-15" r="9"/><circle cx="14" cy="-5" r="9"/><circle cx="9" cy="12" r="9"/><circle cx="-9" cy="12" r="9"/><circle cx="-14" cy="-5" r="9"/></g>
+        <circle cx="0" cy="0" r="13" fill="#FFE08A"/>
+        <use href="#face" transform="translate(0 -1) scale(.85)"/>
+      </g></g>
+    </svg>
+  </div>
+</main>
+
+<!--//////////////////////////////////////////////////////////////
+//////////////////////  VISTA DE ADMIN  //////////////////////////
+//////////////////////////////////////////////////////////////-->
+<main class="app" id="admin" hidden></main>
+
+<!--//////////////////////////////////////////////////////////////
+//////////////////////  CAPAS GLOBALES  //////////////////////////
+//////////////////////////////////////////////////////////////-->
+<div class="overlay" id="overlay"><div id="modal" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status"></div>
+<canvas id="confetti"></canvas>
+
+<script type="module">
+/*//////////////////////////////////////////////////////////////
+//////////////////////  CONFIGURACION  /////////////////////////
+//////////////////////////////////////////////////////////////*/
+
+// Si apiKey queda vacío, el bingo corre en modo demo (datos en localStorage).
+const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDlypP4FiVAtn-qJ-DMqnZSGxZSviMz0MU',
+  authDomain: 'bingoparamiamooooor.firebaseapp.com',
+  projectId: 'bingoparamiamooooor',
+  storageBucket: 'bingoparamiamooooor.firebasestorage.app',
+  messagingSenderId: '573420840856',
+  appId: '1:573420840856:web:cc348c9c4b8850a6d22ded'
+};
+
+// PIN del panel de aprobación (se entra con el link + #admin)
+const ADMIN_PIN = '2811';
+
+// Cupón que se revela al completar las 9 casillas
+const CUPON = {
+  titulo: 'Cupón del premio mayor',
+  texto:  'Es una sorpresa. Para saber qué es, tenés que canjearlo conmigo.'
+};
+const MAYOR = { id:'mayor', nombre:'Premio mayor', premio:'Premio mayor', corto:'Premio mayor', slug:'premio-mayor', n:9,
+  cupon:{ forma:'ribbon', bg:'#FFE08A', bg2:'#FFB5D0', accent:'#B58A12', critter:'mayor' } };
+
+// Las 9 casillas
+const RETOS = [
+  { icono:'agua',     corto:'3 litros de agua',   largo:'Tomar 3 litros de agua en un día', prueba:'una foto de las botellas vacías o de tu registro del día.' },
+  { icono:'bano',     corto:'Darte un baño',      largo:'Darte un baño rico',               prueba:'una foto de tu toalla o de tu pelo mojado.' },
+  { icono:'fruta',    corto:'Una fruta',          largo:'Comer una fruta',                  prueba:'una foto de la fruta.' },
+  { icono:'comidas',  corto:'Las 4 comidas',      largo:'Comer las 4 comidas del día: desayuno, almuerzo, merienda y cena', prueba:'una foto de cada comida (elegí las 4 juntas y yo las armo en una sola).', fotos:4 },
+  { icono:'libro',    corto:'Leer 10 páginas',    largo:'Leer 10 páginas de cualquier libro y contarme qué leíste', prueba:'una foto del libro y un resumen de lo que leíste.', resumen:true },
+  { icono:'ordenar',  corto:'Ordenar tus cosas',  largo:'Ordenar tus cosas',    prueba:'el antes y el después, en foto.' },
+  { icono:'creativo', corto:'Algo creativo',      largo:'Hacer algo creativo',              prueba:'una foto de lo que hiciste.' },
+  { icono:'sonrisa',  corto:'Selfie sonriendo',   largo:'Una selfie sonriendo',             prueba:'la selfie, claro.' },
+  { icono:'deporte',  corto:'Hacer deporte',      largo:'Hacer deporte (vóley, un partido o alguna actividad)', prueba:'una foto o un video haciendo deporte.' }
+];
+
+// Premios por línea (índices de casillas del 0 al 8)
+const LINEAS = [
+  { id:'f1', nombre:'Fila 1',     celdas:[0,1,2], premio:'Un helado', corto:'Un helado', slug:'helado', n:1,
+    cupon:{ forma:'stub', bg:'#FFD9E7', bg2:'#D3EDFC', accent:'#F0679E', critter:'helado' } },
+  { id:'f2', nombre:'Fila 2',     celdas:[3,4,5], premio:'Un chocolate', corto:'Un chocolate', slug:'chocolate', n:2,
+    cupon:{ forma:'ticket', bg:'#FFE0C2', accent:'#B5692B', critter:'chocolate' } },
+  { id:'f3', nombre:'Fila 3',     celdas:[6,7,8], premio:'Una golosina a elección', corto:'Una golosina a elección', slug:'golosina', n:3,
+    cupon:{ forma:'dashed', bg:'#FFF1BF', accent:'#F0679E', critter:'golosina' } },
+  { id:'c1', nombre:'Columna 1',  celdas:[0,3,6], premio:'Pedirme que te cuente algo, sin poder negarme', corto:'Que te cuente algo', slug:'cuento', n:4,
+    detalle:'De cualquier cosa, la que quieras.',
+    cupon:{ forma:'card', bg:'#F3ECFC', bg2:'#DCCDF6', accent:'#7A57C9', critter:'cuento' } },
+  { id:'c2', nombre:'Columna 2',  celdas:[1,4,7], premio:'Una salida a hacer lo que quieras', corto:'Una salida a tu gusto', slug:'salida', n:5,
+    detalle:'Comer, ir a mi casa, salir a caminar...',
+    cupon:{ forma:'stub', bg:'#D6F3E3', bg2:'#FFF1BF', accent:'#2E8B63', critter:'salida' } },
+  { id:'c3', nombre:'Columna 3',  celdas:[2,5,8], premio:'Un jugo o café a elección', corto:'Un jugo o café', slug:'cafe', n:6,
+    cupon:{ forma:'card', bg:'#EAF6FE', bg2:'#BFE3FA', accent:'#2B6AA0', critter:'cafe' } },
+  { id:'d1', nombre:'Diagonal 1', celdas:[0,4,8], premio:'Un regalito sorpresa chiquito', corto:'Un regalito sorpresa', slug:'regalo', n:7,
+    cupon:{ forma:'tag', bg:'#FFB5D0', accent:'#8A2B57', critter:'regalo' } },
+  { id:'d2', nombre:'Diagonal 2', celdas:[2,4,6], premio:'Un "lo que quieras" en algún local', corto:'Un "lo que quieras" en un local', slug:'local', n:8,
+    detalle:'Comida o un artículo, como maquillaje.',
+    cupon:{ forma:'dashed', bg:'#FFD9CC', accent:'#B5472B', critter:'local' } }
+];
+const CUPONES = [...LINEAS, MAYOR];
+
+// Formas irregulares "dibujadas a mano" para casillas y premios
+const BLOBS = [
+  '28% 24% 30% 22% / 26% 30% 22% 28%', '24% 30% 22% 28% / 30% 24% 28% 22%', '30% 22% 26% 30% / 22% 28% 30% 24%',
+  '22% 28% 30% 24% / 28% 22% 24% 30%', '26% 30% 24% 28% / 24% 28% 30% 22%', '30% 26% 22% 28% / 28% 24% 26% 30%',
+  '24% 22% 30% 26% / 30% 28% 22% 24%', '28% 30% 26% 22% / 22% 26% 28% 30%', '22% 26% 28% 30% / 26% 30% 24% 22%'
+];
+const TILTS = [-1.2, .9, -.6, 1.1, -.9, .7, -1, 1.2, -.5];
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  UTILIDADES  ////////////////////////////
+//////////////////////////////////////////////////////////////*/
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  ICONOS SVG  ////////////////////////////
+//////////////////////////////////////////////////////////////*/
+const HEART_PATH = 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
+const P = {
+  agua:'<path d="M12 3s-6.5 7.2-6.5 11.5a6.5 6.5 0 0 0 13 0C18.5 10.2 12 3 12 3z"/>',
+  caminar:'<ellipse cx="8.5" cy="8.5" rx="3" ry="4.8"/><ellipse cx="15.5" cy="15.5" rx="3" ry="4.8"/>',
+  fruta:'<path d="M12 8.5c-1.6-1.2-6-1-6 4.2C6 17 9 21 12 21s6-4 6-8.3c0-5.2-4.4-5.4-6-4.2z"/><path d="M12 8.5c0-2 .8-3.7 2.6-4.5"/>',
+  dormir:'<path d="M20 14.6A8 8 0 1 1 9.4 4a6.5 6.5 0 0 0 10.6 10.6z"/>',
+  hablar:'<path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/>',
+  ordenar:'<path d="M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/>',
+  creativo:'<circle cx="12" cy="12" r="2.4"/><circle cx="12" cy="5.6" r="2.6"/><circle cx="12" cy="18.4" r="2.6"/><circle cx="5.9" cy="8.8" r="2.6"/><circle cx="18.1" cy="8.8" r="2.6"/><circle cx="5.9" cy="15.2" r="2.6"/><circle cx="18.1" cy="15.2" r="2.6"/>',
+  sonrisa:'<circle cx="12" cy="12" r="9"/><path d="M8 14c1 1.8 2.4 2.7 4 2.7s3-.9 4-2.7"/><path d="M9 9.5v.5M15 9.5v.5"/>',
+  estirar:'<circle cx="12" cy="4.8" r="2"/><path d="M12 7.5v7M4.5 9.5L12 11.5l7.5-2M12 14.5l-3.5 6M12 14.5l3.5 6"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  alert:'<path d="M12 6v7M12 17v.5"/>',
+  close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  image:'<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.7"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/>',
+  'heart-line':'<path d="' + HEART_PATH + '"/>'
+};
+const ico = (n, w = 2.1) => `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+/*//////////////////////////////////////////////////////////////
+//////////////////  DIBUJITOS KAWAII DE LOS RETOS  /////////////
+//////////////////////////////////////////////////////////////*/
+const OUTLINE = '#8A4B63';
+const face = (cx, cy, s = 1, dormido = false) => `<g transform="translate(${cx} ${cy}) scale(${s})" stroke="none">
+  ${dormido
+    ? `<path d="M-7 0q2-2.6 4 0M3 0q2-2.6 4 0" fill="none" stroke="#5E3552" stroke-width="1.5" stroke-linecap="round"/>`
+    : `<circle cx="-5" cy="0" r="1.9" fill="#5E3552"/><circle cx="5" cy="0" r="1.9" fill="#5E3552"/>`}
+  <ellipse cx="-9" cy="4" rx="3" ry="2" fill="#FF8FB0" opacity=".85"/><ellipse cx="9" cy="4" rx="3" ry="2" fill="#FF8FB0" opacity=".85"/>
+  <path d="M-2.4 3.2q2.4 2.8 4.8 0" fill="none" stroke="#5E3552" stroke-width="1.4" stroke-linecap="round"/></g>`;
+const sparkle4 = (x, y, r, fill = '#FFE08A') => `<path d="M${x} ${y - r}l${r * .28} ${r * .72} ${r * .72} ${r * .28}-${r * .72} ${r * .28}-${r * .28} ${r * .72}-${r * .28}-${r * .72}-${r * .72}-${r * .28} ${r * .72}-${r * .28}z" fill="${fill}" stroke-width="1"/>`;
+const K = {
+  agua: `<path d="M24 5C24 5 10 21 10 30a14 14 0 0 0 28 0C38 21 24 5 24 5Z" fill="#8FD0F5"/><ellipse cx="16.5" cy="29" rx="2" ry="4" fill="#fff" stroke="none" transform="rotate(12 16.5 29)"/>${face(24, 32)}`,
+  bano: `<path d="M5 25H43V29A11 11 0 0 1 32 40H16A11 11 0 0 1 5 29Z" fill="#CFE8FB"/><path d="M12 40L10 44M36 40L38 44" fill="none"/><circle cx="14" cy="17" r="5" fill="#fff"/><circle cx="22" cy="12" r="4" fill="#fff"/><circle cx="31" cy="17" r="5.5" fill="#fff"/><circle cx="37" cy="10" r="3" fill="#fff"/>${face(24, 32, .85)}`,
+  fruta: `<path d="M24 14C18 9 7 12 7 26C7 37 15 44 20 44C22 44 23 43 24 43C25 43 26 44 28 44C33 44 41 37 41 26C41 12 30 9 24 14Z" fill="#FF8FA8"/><path d="M24 14C24 10 25 7 27 5" fill="none" stroke-width="2"/><path d="M26 11C29 5 35 6 36 8C34 12 29 13 26 11Z" fill="#8CD39A"/><ellipse cx="13.5" cy="24" rx="2" ry="4" fill="#fff" stroke="none" transform="rotate(18 13.5 24)"/>${face(24, 30)}`,
+  comidas: `<path d="M4 9V19Q4 22 6.5 22Q9 22 9 19V9M6.5 22V42" fill="none"/><circle cx="28" cy="25" r="15" fill="#fff"/><circle cx="28" cy="25" r="10.5" fill="#FFE0C2"/>${face(28, 25, .9)}`,
+  libro: `<path d="M9 8H35A3 3 0 0 1 38 11V40H12A3 3 0 0 1 9 37Z" fill="#E8DCF8"/><path d="M12 36H38V40H12Z" fill="#fff"/><rect x="9" y="8" width="5" height="32" rx="2" fill="#B79CED"/><path d="M31 8V17L34 14.5L37 17V8Z" fill="#F06C9B"/>${face(24, 24, .95)}`,
+  ordenar: `<rect x="8" y="20" width="32" height="22" rx="4" fill="#FFE0C2"/><rect x="5" y="14" width="38" height="8" rx="3" fill="#FFC59B"/>${sparkle4(39, 7, 6)}${face(24, 31)}`,
+  creativo: `<path d="M24 6C13 6 5 14 5 24C5 34 13 42 22 42C26 42 27 39 25 36C23 33 25 30 29 30H34C39 30 43 27 43 22C43 13 35 6 24 6Z" fill="#E8DCF8"/><circle cx="14" cy="19" r="3" fill="#F06C9B"/><circle cx="21" cy="12.5" r="3" fill="#FFE08A"/><circle cx="31" cy="12.5" r="3" fill="#8CC9F0"/><circle cx="37.5" cy="20" r="3" fill="#8CD39A"/>${face(20, 30, .8)}`,
+  sonrisa: `<circle cx="24" cy="25" r="17" fill="#FFE08A"/>${sparkle4(40, 9, 5, '#fff')}${face(24, 25, 1.25)}`,
+  deporte: `<circle cx="24" cy="25" r="17" fill="#fff"/><path d="M24 8A17 17 0 0 0 24 42C11 36 11 14 24 8Z" fill="#FFB5D0" stroke="none"/><path d="M24 8A17 17 0 0 1 24 42C37 36 37 14 24 8Z" fill="#A9DAF7" stroke="none"/><circle cx="24" cy="25" r="17" fill="none"/><path d="M24 8C11 14 11 36 24 42M24 8C37 14 37 36 24 42" fill="none"/>${sparkle4(40, 9, 5)}${face(24, 25, .9)}`
+};
+const kawaii = n => `<svg class="ill" viewBox="0 0 48 48" aria-hidden="true"><g stroke="${OUTLINE}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">${K[n]}</g></svg>`;
+const heartSolid = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${HEART_PATH}"/></svg>`;
+const sparkleSolid = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg>`;
+const cloudSolid = `<svg viewBox="0 0 64 40" fill="currentColor" aria-hidden="true"><circle cx="20" cy="24" r="12"/><circle cx="36" cy="18" r="14"/><circle cx="50" cy="26" r="10"/><rect x="10" y="24" width="48" height="12" rx="6"/></svg>`;
+const DECO = { heart: heartSolid, sparkle: sparkleSolid, cloud: cloudSolid };
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  CUPONES (DIBUJO)  //////////////////////
+//////////////////////////////////////////////////////////////*/
+const INK = '#5E3552', ROSE_D = '#C23F7A', CREAM = '#FFF6EE';
+const F_T = "Chewy,'Baloo 2','Comic Sans MS','Chalkboard SE',cursive";
+const F_B = "Mali,'Comic Sans MS','Chalkboard SE','Segoe Print',ui-rounded,system-ui,sans-serif";
+const _mc = document.createElement('canvas').getContext('2d');
+const medir = (txt, size, fam, peso = 400) => { _mc.font = `${peso} ${size}px ${fam}`; return _mc.measureText(txt).width; };
+
+function envolver(texto, maxW, size, fam, peso){
+  const out = [];
+  String(texto).split('\n').forEach(par => {
+    let cur = '';
+    par.split(/\s+/).filter(Boolean).forEach(w => {
+      const t = cur ? cur + ' ' + w : w;
+      if (!cur || medir(t, size, fam, peso) <= maxW) cur = t; else { out.push(cur); cur = w; }
+    });
+    out.push(cur);
+  });
+  return out;
+}
+function ajustar(texto, maxW, max, min, maxLineas, fam, peso){
+  for (let s = max; s >= min; s -= 1){
+    const lines = envolver(texto, maxW, s, fam, peso);
+    if (lines.length <= maxLineas && lines.every(x => medir(x, s, fam, peso) <= maxW)) return { size:s, lines };
+  }
+  return { size:min, lines:envolver(texto, maxW, min, fam, peso) };
+}
+const T = (x, y, str, size, fill, { fam = F_B, peso = 600, anchor = 'start', maxW = 0, ls = 0 } = {}) => {
+  const w = medir(str, size, fam, peso) + ls * str.length;
+  const fit = maxW && w > maxW ? ` textLength="${maxW}" lengthAdjust="spacingAndGlyphs"` : '';
+  return `<text x="${x}" y="${y}" font-family="${fam}" font-size="${size}" font-weight="${peso}" fill="${fill}" text-anchor="${anchor}"${ls ? ` letter-spacing="${ls}"` : ''}${fit}>${esc(str)}</text>`;
+};
+
+// Trazo "a mano": puntos con un poquito de temblor, unidos con curvas suaves
+const semilla = s => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return () => { h = Math.imul(h ^ (h >>> 15), 2246822507) >>> 0; h ^= h >>> 13; return (h >>> 0) / 4294967296; }; };
+function puntosRect(x, y, w, h, r){
+  const p = [], paso = 34;
+  const arco = (cx, cy, a0) => { for (let k = 0; k <= 3; k++){ const a = a0 + k * Math.PI / 6; p.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); } };
+  arco(x + r, y + r, Math.PI);
+  for (let t = x + r + paso; t < x + w - r - 8; t += paso) p.push([t, y]);
+  arco(x + w - r, y + r, Math.PI * 1.5);
+  for (let t = y + r + paso; t < y + h - r - 8; t += paso) p.push([x + w, t]);
+  arco(x + w - r, y + h - r, 0);
+  for (let t = x + w - r - paso; t > x + r + 8; t -= paso) p.push([t, y + h]);
+  arco(x + r, y + h - r, Math.PI * .5);
+  for (let t = y + h - r - paso; t > y + r + 8; t -= paso) p.push([x, t]);
+  return p;
+}
+function trazo(pts, rnd, amp = 1.3){
+  const q = pts.map(([a, b]) => [a + (rnd() - .5) * 2 * amp, b + (rnd() - .5) * 2 * amp]);
+  const n = q.length, f = v => v.toFixed(1);
+  let d = `M${f(q[0][0])} ${f(q[0][1])}`;
+  for (let i = 0; i < n; i++){
+    const p0 = q[(i - 1 + n) % n], p1 = q[i], p2 = q[(i + 1) % n], p3 = q[(i + 2) % n];
+    d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`;
+  }
+  return d + 'Z';
+}
+function codigoBarras(x, y, w, h, code){
+  const r = semilla(code), partes = []; let total = 0;
+  while (total < 64){ const b = 1 + Math.floor(r() * 3), g = 1 + Math.floor(r() * 2); partes.push([b, g]); total += b + g; }
+  const k = w / total; let cx = x, out = '';
+  for (const [b, g] of partes){ out += `<rect x="${cx.toFixed(2)}" y="${y}" width="${(b * k).toFixed(2)}" height="${h}" fill="${INK}"/>`; cx += (b + g) * k; }
+  return out;
+}
+
+// Amiguitos de cada cupón (caja de 48x48)
+const rayos = Array.from({ length:8 }, (_, i) => { const a = i * Math.PI / 4, c = Math.cos(a), s = Math.sin(a); return `M${24 + c * 17} ${24 + s * 17}L${24 + c * 22} ${24 + s * 22}`; }).join('');
+const CR = {
+  helado:    `<path d="M15 24H33L24 45Z" fill="#FFC59B"/><path d="M19 28L23 37M28 28L24 37" fill="none" stroke-width="1" opacity=".55"/><circle cx="24" cy="17" r="12.5" fill="#FFB5D0"/><path d="M12 23q3 5 6 1q3 5 6 1q3 4 6 0q3 4 6-1" fill="#FFB5D0"/>${face(24, 17, .8)}`,
+  chocolate: `<rect x="11" y="9" width="26" height="33" rx="5" fill="#C98A64"/><path d="M11 20H37M11 31H37" fill="none" stroke-width="1" opacity=".5"/><path d="M13 5h22a2 2 0 0 1 2 2v7H11V7a2 2 0 0 1 2-2z" fill="#FFB5D0"/>${face(24, 26, .85)}`,
+  golosina:  `<path d="M13 24L3 15V33Z" fill="#fff"/><path d="M35 24L45 15V33Z" fill="#fff"/><ellipse cx="24" cy="24" rx="13" ry="10" fill="#FFB5D0"/>${face(24, 25, .85)}`,
+  cuento:    `<path d="M9 8H39A5 5 0 0 1 44 13V28A5 5 0 0 1 39 33H27L19 42V33H9A5 5 0 0 1 4 28V13A5 5 0 0 1 9 8Z" fill="#fff"/>${face(24, 20, 1)}`,
+  salida:    `<path d="${rayos}" fill="none" stroke-width="2.6"/><circle cx="24" cy="24" r="13" fill="#FFE08A"/>${face(24, 25, 1)}`,
+  cafe:      `<path d="M12 18H34V31A9 9 0 0 1 25 40H21A9 9 0 0 1 12 31Z" fill="#fff"/><path d="M34 22h3a5 5 0 0 1 0 10h-3" fill="none"/><path d="M19 13q-2-3 0-5M27 13q-2-3 0-5" fill="none" stroke="#F5A9C6" stroke-width="2"/>${face(23, 29, .8)}`,
+  regalo:    `<rect x="9" y="20" width="30" height="21" rx="3" fill="#fff"/><rect x="21.5" y="20" width="5" height="21" fill="#8CC9F0"/><rect x="6" y="14" width="36" height="8" rx="3" fill="#FFE08A"/><rect x="21.5" y="14" width="5" height="8" fill="#8CC9F0"/><path d="M24 14C19 6 14 8 17 13M24 14C29 6 34 8 31 13" fill="none"/>${face(15.5, 32, .55)}`,
+  local:     `<path d="M16 17V13A8 8 0 0 1 32 13V17" fill="none"/><path d="M9 17H39L41 42H7Z" fill="#fff"/>${face(24, 30, .95)}`,
+  mayor:     `<path transform="translate(2 6) scale(1.8)" d="${HEART_PATH}" fill="#FFB5D0"/><path d="M16 11L18 3L24 9L30 3L32 11Z" fill="#FFF3B8"/>${face(24, 25, 1.1)}`
+};
+const critter = (nombre, cx, cy, tam) => { const s = tam / 48; return `<g transform="translate(${(cx - tam / 2).toFixed(1)} ${(cy - tam / 2).toFixed(1)}) scale(${s.toFixed(3)})" stroke="${OUTLINE}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">${CR[nombre]}</g>`; };
+
+let _cupId = 0;
+function cuponSVG(l, { canjeado = false, fuentes = '' } = {}){
+  const c = l.cupon, id = 'cp' + (++_cupId), rnd = semilla(l.id), W = 360;
+  const code = 'BNG-' + l.id.toUpperCase().slice(0, 2) + '-' + ['7K2Q','9M4X','2H6B','3P8D','5T1N','8R3W','4V9J','6Z2C','1A0X'][l.n - 1];
+  const num = 'N° 0' + l.n;
+  const mayor = l.id === 'mayor';
+  const forma = c.forma;
+  const L = forma === 'tag' ? 54 : 28;
+  const maxW = forma === 'stub' ? 262 - 14 - L : 250 - L;
+  let body = '', defs = '', extra = '', H, cx, cy;
+
+  if (!mayor){
+    // ---- layout vertical ----
+    let y = 38;
+    const etiqueta = T(L, y, 'CUPÓN', 11, c.accent, { peso:700, ls:3 });
+    const tit = ajustar(l.premio, maxW, 30, 19, 3, F_T, 400);
+    let yt = y + 8 + tit.size;
+    const titulo = tit.lines.map((ln, k) => T(L, yt + k * tit.size * 1.06, ln, tit.size, ROSE_D, { fam:F_T, peso:400, maxW })).join('');
+    y = yt + (tit.lines.length - 1) * tit.size * 1.06 + 8;
+    let detalle = '';
+    if (l.detalle){
+      const d = ajustar(l.detalle, maxW, 12.5, 10.5, 3, F_B, 600);
+      y += 16;
+      detalle = d.lines.map((ln, k) => T(L, y + k * 15, ln, d.size, INK, { peso:600, maxW })).join('');
+      y += (d.lines.length - 1) * 15 + 4;
+    }
+    const yHeader = y;
+    y += 18;
+    const canj = T(L, y + 6, 'Canjeable con Ferdy', 12, INK, { peso:700 }) + T(L, y + 21, 'Válido hasta el sábado', 10.5, '#8E6C84', { peso:500 });
+    const yb = y + 32, yCode = yb + 22 + 12;
+    H = Math.max(200, yCode + 18);
+    const sepY = y - 9;
+    cx = forma === 'stub' ? 308 : 304; cy = (H - 30) / 2;
+    let tamC = forma === 'stub' ? 66 : 78;
+    if (forma === 'ticket'){ tamC = 54; cy = sepY / 2 + 2; }
+    if (forma === 'card'){ tamC = 66; cy = (yHeader + 10) / 2 + 2; }
+    const bx = 6, by = 6, bw = W - 12, bh = H - 12;
+    const barras = codigoBarras(L, yb, 118, 22, code) + T(L, yCode, code, 8.5, INK, { peso:600, ls:1.2 });
+    const num_ = T(cx, H - 22, num, 14, c.accent, { fam:F_T, peso:400, anchor:'middle' });
+    const crit = critter(c.critter, cx, cy, tamC);
+
+    if (forma === 'stub'){
+      const d = trazo(puntosRect(bx, by, bw, bh, 18), rnd);
+      defs = `<clipPath id="${id}b"><path d="${d}"/></clipPath><mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="#fff"/><circle cx="262" cy="${by}" r="9" fill="#000"/><circle cx="262" cy="${by + bh}" r="9" fill="#000"/></mask>`;
+      body = `<g mask="url(#${id}m)"><path d="${d}" fill="${c.bg}"/><rect x="262" y="0" width="${W}" height="${H}" fill="${c.bg2}" clip-path="url(#${id}b)"/><path d="${d}" fill="none" stroke="${OUTLINE}" stroke-width="2.4" stroke-linejoin="round"/></g>
+        <g clip-path="url(#${id}b)" fill="none" stroke="${OUTLINE}" stroke-width="2.2"><circle cx="262" cy="${by}" r="9"/><circle cx="262" cy="${by + bh}" r="9"/></g>
+        <path d="M262 ${by + 14}V${by + bh - 14}" stroke="${c.accent}" stroke-width="2.4" stroke-dasharray="5 6" stroke-linecap="round"/>`;
+    } else if (forma === 'ticket'){
+      const d = trazo(puntosRect(bx, by, bw, bh, 14), rnd);
+      defs = `<clipPath id="${id}b"><path d="${d}"/></clipPath><mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="#fff"/><circle cx="${bx}" cy="${sepY}" r="10" fill="#000"/><circle cx="${bx + bw}" cy="${sepY}" r="10" fill="#000"/></mask>`;
+      body = `<g mask="url(#${id}m)"><path d="${d}" fill="${c.bg}" stroke="${OUTLINE}" stroke-width="2.4" stroke-linejoin="round"/></g>
+        <g clip-path="url(#${id}b)" fill="none" stroke="${OUTLINE}" stroke-width="2.2"><circle cx="${bx}" cy="${sepY}" r="10"/><circle cx="${bx + bw}" cy="${sepY}" r="10"/></g>
+        <path d="M${bx + 16} ${sepY}H${bx + bw - 16}" stroke="${c.accent}" stroke-width="2.2" stroke-dasharray="5 6" stroke-linecap="round" opacity=".8"/>`;
+    } else if (forma === 'dashed'){
+      const dOut = trazo(puntosRect(3, 3, W - 6, H - 6, 20), rnd, 1.1);
+      const dIn = trazo(puntosRect(13, 13, W - 26, H - 26, 12), rnd, 1);
+      body = `<path d="${dOut}" fill="#fff" stroke="${c.accent}" stroke-width="2.8" stroke-dasharray="9 7" stroke-linecap="round" stroke-linejoin="round"/><path d="${dIn}" fill="${c.bg}" stroke="${OUTLINE}" stroke-width="2.2" stroke-linejoin="round"/>`;
+    } else if (forma === 'card'){
+      const d = trazo(puntosRect(bx, by, bw, bh, 18), rnd);
+      defs = `<clipPath id="${id}b"><path d="${d}"/></clipPath>`;
+      body = `<path d="${d}" fill="#fff"/><rect x="0" y="0" width="${W}" height="${yHeader + 10}" fill="${c.bg2}" clip-path="url(#${id}b)"/><rect x="0" y="${yHeader + 10}" width="${W}" height="${H}" fill="${c.bg}" clip-path="url(#${id}b)"/><path d="M${bx + 2} ${yHeader + 10}H${bx + bw - 2}" stroke="${OUTLINE}" stroke-width="2" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${OUTLINE}" stroke-width="2.4" stroke-linejoin="round"/>`;
+    } else if (forma === 'tag'){
+      // forma de etiqueta: esquinas cortadas a la izquierda
+      const d = trazo([[bx + 36, by], [bx + 120, by], [bx + 200, by], [bx + bw - 18, by + 3], [bx + bw, by + 20], [bx + bw, by + bh / 2], [bx + bw, by + bh - 20], [bx + bw - 18, by + bh - 3], [bx + 200, by + bh], [bx + 120, by + bh], [bx + 36, by + bh], [bx + 12, by + bh - 24], [bx, by + bh - 38], [bx, by + 38], [bx + 12, by + 24]], rnd, 1.1);
+      defs = `<mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="#fff"/><circle cx="${bx + 26}" cy="${H / 2}" r="7" fill="#000"/></mask>`;
+      body = `<g mask="url(#${id}m)"><path d="${d}" fill="${c.bg}" stroke="${OUTLINE}" stroke-width="2.4" stroke-linejoin="round"/></g><circle cx="${bx + 26}" cy="${H / 2}" r="7" fill="none" stroke="${OUTLINE}" stroke-width="2"/>`;
+    }
+    body += etiqueta + titulo + detalle + canj + barras + crit + num_;
+  } else {
+    // ---- premio mayor ----
+    const cuadro = ajustar(CUPON.texto, 262, 16, 12, 6, F_B, 700);
+    const lh = cuadro.size * 1.4, cajaH = cuadro.lines.length * lh + 20;
+    const yCaja = 196;
+    const yb = yCaja + cajaH + 22, yCode = yb + 22 + 12;
+    H = yCode + 24;
+    const bx = 6, by = 6, bw = W - 12, bh = H - 12;
+    const d = trazo(puntosRect(bx, by, bw, bh, 14), rnd);
+    const huecos = Array.from({ length:14 }, (_, i) => 24 + i * 24);
+    defs = `<mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}"><rect width="${W}" height="${H}" fill="#fff"/>${huecos.map(x => `<circle cx="${x}" cy="${by}" r="7" fill="#000"/><circle cx="${x}" cy="${by + bh}" r="7" fill="#000"/>`).join('')}</mask>`;
+    const banner = trazo([[24, 36], [120, 35], [240, 36], [338, 36], [322, 56], [338, 78], [240, 79], [120, 78], [24, 78], [40, 56]], rnd, 1);
+    cx = W / 2; cy = 134;
+    const caja = trazo(puntosRect(34, yCaja, W - 68, cajaH, 16), rnd, 1);
+    const textoMayor = cuadro.lines.map((ln, k) => T(W / 2, yCaja + 14 + cuadro.size + k * lh - 4, ln, cuadro.size, INK, { peso:700, anchor:'middle', maxW:262 })).join('');
+    body = `<g mask="url(#${id}m)"><path d="${d}" fill="${c.bg}" stroke="${OUTLINE}" stroke-width="2.4" stroke-linejoin="round"/></g>
+      <path d="${banner}" fill="#F0679E" stroke="${OUTLINE}" stroke-width="2.2" stroke-linejoin="round"/>
+      ${T(W / 2, 66, 'Premio mayor', 28, '#fff', { fam:F_T, peso:400, anchor:'middle', maxW:240 })}
+      ${critter('mayor', cx, cy, 108)}
+      <path d="${caja}" fill="#fff" stroke="${OUTLINE}" stroke-width="2.2"/>${textoMayor}
+      ${codigoBarras(34, yb, 130, 22, code)}${T(34, yCode, code, 8.5, INK, { peso:600, ls:1.2 })}
+      ${T(W - 34, yb + 12, 'Canjeable con Ferdy', 11, INK, { peso:700, anchor:'end' })}${T(W - 34, yb + 30, num, 14, c.accent, { fam:F_T, peso:400, anchor:'end' })}`;
+  }
+
+  const sello = canjeado ? `<g transform="rotate(-10 ${W / 2} ${H / 2})"><rect x="${W / 2 - 132}" y="${H / 2 - 32}" width="264" height="64" rx="14" fill="#fff" fill-opacity=".72" stroke="#F0679E" stroke-width="5"/>${T(W / 2, H / 2 + 14, 'CANJEADO', 42, '#F0679E', { fam:F_T, peso:400, anchor:'middle', ls:2, maxW:236 })}</g>` : '';
+  const estilo = fuentes ? `<style>${fuentes}</style>` : '';
+  return `<svg class="cup" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cupón: ${esc(l.premio)}"><defs>${estilo}${defs}</defs>${body}${sello}</svg>`;
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  CUPONES (DESCARGA)  ////////////////////
+//////////////////////////////////////////////////////////////*/
+let _fuentes;
+function fuentesEmbebidas(){
+  return _fuentes ||= (async () => {
+    try {
+      const css = await (await fetch('https://fonts.googleapis.com/css2?family=Chewy&family=Mali:wght@500;600;700&display=swap')).text();
+      const bloques = [...css.matchAll(/\/\*\s*latin(?:-ext)?\s*\*\/\s*@font-face\s*\{[^}]*\}/g)].map(m => m[0]);
+      let out = bloques.join('\n');
+      const urls = [...new Set([...out.matchAll(/url\((https:[^)]+)\)/g)].map(m => m[1]))];
+      await Promise.all(urls.map(async u => {
+        const b = await (await fetch(u)).blob();
+        const d = await new Promise(ok => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.readAsDataURL(b); });
+        out = out.split(u).join(d);
+      }));
+      return out;
+    } catch { return ''; }
+  })();
+}
+
+async function descargarCupon(id){
+  const l = CUPONES.find(x => x.id === id); if (!l) return;
+  try {
+    const svg = cuponSVG(l, { canjeado: !!canjeados[id], fuentes: await fuentesEmbebidas() });
+    const m = svg.match(/viewBox="0 0 (\d+) ([\d.]+)"/), w = +m[1], h = Math.ceil(+m[2]);
+    const url = URL.createObjectURL(new Blob([svg], { type:'image/svg+xml;charset=utf-8' }));
+    const img = await new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = url; });
+    const k = 3, pad = 14, cv2 = document.createElement('canvas');
+    cv2.width = (w + pad * 2) * k; cv2.height = (h + pad * 2) * k;
+    const g = cv2.getContext('2d'); g.fillStyle = CREAM; g.fillRect(0, 0, cv2.width, cv2.height);
+    g.drawImage(img, pad * k, pad * k, w * k, h * k);
+    URL.revokeObjectURL(url);
+    const blob = await new Promise(ok => cv2.toBlob(ok, 'image/png'));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = `cupon-${l.slug}.png`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    toast(`Cupón guardado: ${a.download}`);
+  } catch { toast('No se pudo descargar. Sacale una captura de pantalla.'); }
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-dl]'); if (b) descargarCupon(b.dataset.dl); });
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  ALMACENAMIENTO  ////////////////////////
+//////////////////////////////////////////////////////////////*/
+// Interfaz común: subscribe(cb), save(i, datos), update(i, parche)
+
+const modoDemo = !FIREBASE_CONFIG.apiKey;
+
+function crearStoreDemo(){
+  const KEY = 'bingo-demo-v1';
+  const KC = 'bingo-demo-canje-v1';
+  const listeners = new Set(), listenersC = new Set();
+  const leer = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+  const leerC = () => { try { return JSON.parse(localStorage.getItem(KC)) || {}; } catch { return {}; } };
+  const emitir = () => { const d = leer(); listeners.forEach(cb => cb(d)); };
+  const emitirC = () => { const d = leerC(); listenersC.forEach(cb => cb(d)); };
+  addEventListener('storage', e => { if (e.key === KEY) emitir(); if (e.key === KC) emitirC(); });
+  return {
+    subscribe(cb, cbC){ listeners.add(cb); cb(leer()); listenersC.add(cbC); cbC(leerC()); },
+    async canje(id, v){ const d = leerC(); if (v) d[id] = true; else delete d[id]; localStorage.setItem(KC, JSON.stringify(d)); emitirC(); },
+    async save(i, datos){ const d = leer(); d[i] = { ...(d[i] || {}), ...datos }; localStorage.setItem(KEY, JSON.stringify(d)); emitir(); },
+    async update(i, parche){ return this.save(i, parche); }
+  };
+}
+
+async function crearStoreFirebase(){
+  const V = '10.14.1';
+  const [{ initializeApp }, { getFirestore, collection, doc, setDoc, onSnapshot }] = await Promise.all([
+    import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`),
+    import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`)
+  ]);
+  const db = getFirestore(initializeApp(FIREBASE_CONFIG));
+  const col = collection(db, 'casillas');
+  return {
+    subscribe(cb, cbC){
+      onSnapshot(col, snap => {
+        const d = {};
+        snap.forEach(x => { d[+x.id.slice(1)] = x.data(); });
+        cb(d);
+      }, () => toast('No se pudo conectar. Revisá tu internet.'));
+      onSnapshot(collection(db, 'cupones'), snap => {
+        const d = {};
+        snap.forEach(x => { if (x.data().canjeado) d[x.id] = true; });
+        cbC(d);
+      }, () => {});
+    },
+    async canje(id, v){ await setDoc(doc(db, 'cupones', id), { canjeado: !!v }, { merge:true }); },
+    async save(i, datos){ await setDoc(doc(db, 'casillas', 'c' + i), datos, { merge:true }); },
+    async update(i, parche){ await setDoc(doc(db, 'casillas', 'c' + i), parche, { merge:true }); }
+  };
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  ESTADO  ////////////////////////////////
+//////////////////////////////////////////////////////////////*/
+let store;
+let cells = Array.from({ length:9 }, () => ({ estado:'vacia' }));
+let prevEstados = null;
+let canjeados = {};
+let adminSig = '';
+const rejecting = new Set();
+const drafts = {};
+const SEEN_KEY = 'bingo-seen-v1';
+const getSeen = () => { try { return JSON.parse(localStorage.getItem(SEEN_KEY)) || []; } catch { return []; } };
+const setSeen = a => { try { localStorage.setItem(SEEN_KEY, JSON.stringify(a)); } catch {} };
+
+const lineaCompleta = l => l.celdas.every(i => cells[i].estado === 'aprobada');
+const aprobadas = () => cells.filter(c => c.estado === 'aprobada').length;
+const esAdmin = () => location.hash === '#admin';
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  TABLERO  ///////////////////////////////
+//////////////////////////////////////////////////////////////*/
+function construirTablero(){
+  $('#board').innerHTML = RETOS.map((r, i) => `
+    <button class="cell enter s-vacia${i % 2 ? ' sky' : ''}" data-i="${i}" style="--i:${i};--r:${BLOBS[i]};--rot:${TILTS[i]}deg" aria-label="${esc(r.largo)}">
+      <span class="num">${i + 1}</span>
+      <span class="stk">${kawaii(r.icono)}</span>
+      <span class="t">${esc(r.corto)}</span>
+      <span class="pill"></span>
+    </button>`).join('');
+  $('#board').addEventListener('click', e => {
+    const b = e.target.closest('.cell');
+    if (b) abrirCasilla(+b.dataset.i);
+  });
+  $('#board').addEventListener('animationend', e => {
+    if (e.animationName === 'rise') e.target.classList.remove('enter');
+  });
+}
+
+const PILLS = {
+  vacia:     () => 'Subir foto',
+  revision:  () => `${ico('clock', 2.6)}En revisión`,
+  aprobada:  () => `${ico('check', 3)}Lista`,
+  rechazada: () => `${ico('alert', 3)}Repetir`
+};
+
+function pintarTablero(){
+  $$('.cell').forEach(el => {
+    const i = +el.dataset.i, est = cells[i].estado || 'vacia';
+    el.classList.remove('s-vacia', 's-revision', 's-aprobada', 's-rechazada');
+    el.classList.add('s-' + est);
+    $('.pill', el).innerHTML = PILLS[est]();
+    if (prevEstados && prevEstados[i] !== est && est === 'aprobada') {
+      el.classList.remove('stamp'); void el.offsetWidth; el.classList.add('stamp');
+      el.addEventListener('animationend', () => el.classList.remove('stamp'), { once:true });
+    }
+  });
+  const n = aprobadas();
+  $('#pcount').textContent = `${n} de 9`;
+  $('#pbar').style.width = (n / 9 * 100) + '%';
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  PREMIOS Y CUPON  ///////////////////////
+//////////////////////////////////////////////////////////////*/
+function construirPremios(){
+  $('#prizes').innerHTML = LINEAS.map((l, k) => `
+    <button class="prize" data-k="${k}" style="--r:${BLOBS[(k + 3) % 9]};--rot:${TILTS[(k + 5) % 9]}deg" aria-label="${esc(l.nombre)}">
+      <div class="prize-in">
+        <div class="face front">${ico('lock')}<span>${esc(l.nombre)}</span></div>
+        <div class="face back"><small>${esc(l.nombre)}</small><span>${esc(l.corto)}</span></div>
+      </div>
+    </button>`).join('');
+  $('#prizes').addEventListener('click', e => {
+    const b = e.target.closest('.prize');
+    if (!b) return;
+    const l = LINEAS[+b.dataset.k];
+    if (lineaCompleta(l)) abrirCupon(l); else resaltarLinea(l);
+  });
+  $$('[data-ico]').forEach(el => { el.innerHTML = ico(el.dataset.ico); });
+}
+
+function abrirCupon(l){
+  const ca = !!canjeados[l.id];
+  abrirModal(`
+    <h3>${esc(l.nombre)}</h3>
+    <div class="cup-box">${cuponSVG(l, { canjeado: ca })}</div>
+    <p class="hint">${ca ? 'Este ya lo canjeaste.' : 'Guardalo y mostrámelo para canjearlo.'}</p>
+    <button class="btn" data-dl="${l.id}">Descargar cupón</button>
+    <button class="btn soft" data-close>Cerrar</button>
+  `, 'dialog');
+}
+
+function pintarPremios(){
+  $$('.prize').forEach(el => el.classList.toggle('open', lineaCompleta(LINEAS[+el.dataset.k])));
+  const full = aprobadas() === 9;
+  $('#coupon').classList.toggle('open', full);
+  if (full){
+    const k = 'm' + !!canjeados.mayor;
+    if ($('#coupon-art').dataset.k !== k){ $('#coupon-art').innerHTML = cuponSVG(MAYOR, { canjeado: !!canjeados.mayor }); $('#coupon-art').dataset.k = k; }
+  }
+}
+
+function resaltarLinea(l){
+  $('#board').scrollIntoView({ behavior: REDUCE ? 'auto' : 'smooth', block:'center' });
+  l.celdas.forEach((i, n) => setTimeout(() => {
+    const el = $(`.cell[data-i="${i}"]`);
+    el.classList.remove('hl'); void el.offsetWidth; el.classList.add('hl');
+    el.addEventListener('animationend', () => el.classList.remove('hl'), { once:true });
+  }, 250 + n * 120));
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  MODALES Y AVISOS  //////////////////////
+//////////////////////////////////////////////////////////////*/
+const overlay = $('#overlay'), modal = $('#modal');
+let cerrarTimer;
+
+function abrirModal(html, tipo){
+  clearTimeout(cerrarTimer);
+  modal.className = tipo;
+  modal.innerHTML = html;
+  overlay.classList.toggle('center', tipo !== 'sheet');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('show')));
+}
+function cerrarModal(){
+  overlay.classList.remove('show');
+  document.body.style.overflow = '';
+  cerrarTimer = setTimeout(() => { modal.innerHTML = ''; }, 500);
+}
+overlay.addEventListener('click', e => { if (e.target === overlay || e.target.closest('[data-close]')) cerrarModal(); });
+addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+
+let toastTimer;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  CONFETI PLANO  /////////////////////////
+//////////////////////////////////////////////////////////////*/
+const cv = $('#confetti'), cx = cv.getContext('2d');
+const heartPath = new Path2D(HEART_PATH);
+const COLORES = ['#F06C9B', '#E0457B', '#FFB3C6', '#C9B6F0', '#BFE3FA', '#FFE08A'];
+let parts = [], raf = 0;
+
+function confeti(cantidad = 110){
+  if (REDUCE) return;
+  const dpr = devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  for (let i = 0; i < cantidad; i++){
+    const a = (-Math.PI / 2) + (Math.random() - .5) * 1.6, v = 9 + Math.random() * 10;
+    parts.push({
+      x: innerWidth / 2 + (Math.random() - .5) * 80, y: innerHeight * .62,
+      vx: Math.cos(a) * v, vy: Math.sin(a) * v,
+      s: 8 + Math.random() * 10, r: Math.random() * 6.28, vr: (Math.random() - .5) * .3,
+      c: COLORES[(Math.random() * COLORES.length) | 0], f: ['c', 'q', 'h', 'h'][(Math.random() * 4) | 0], vida: 1
+    });
+  }
+  if (!raf) raf = requestAnimationFrame(pasoConfeti);
+}
+function pasoConfeti(){
+  cx.clearRect(0, 0, innerWidth, innerHeight);
+  parts = parts.filter(p => p.vida > 0 && p.y < innerHeight + 40);
+  for (const p of parts){
+    p.vy += .32; p.vx *= .985; p.vy *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+    if (p.y > innerHeight * .8) p.vida -= .03;
+    cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.globalAlpha = Math.max(p.vida, 0); cx.fillStyle = p.c;
+    if (p.f === 'c'){ cx.beginPath(); cx.arc(0, 0, p.s / 2, 0, 6.28); cx.fill(); }
+    else if (p.f === 'q'){ cx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .66); }
+    else { cx.scale(p.s / 24, p.s / 24); cx.translate(-12, -12); cx.fill(heartPath); }
+    cx.restore();
+  }
+  if (parts.length) raf = requestAnimationFrame(pasoConfeti);
+  else { raf = 0; cx.clearRect(0, 0, innerWidth, innerHeight); }
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  FOTO: COMPRESION  //////////////////////
+//////////////////////////////////////////////////////////////*/
+async function abrirBitmap(file){
+  try { return await createImageBitmap(file, { imageOrientation:'from-image' }); }
+  catch {
+    return new Promise((ok, no) => {
+      const im = new Image(), u = URL.createObjectURL(file);
+      im.onload = () => ok(im); im.onerror = no; im.src = u;
+    });
+  }
+}
+
+// Junta varias fotos (hasta 4) en una sola imagen en cuadrícula
+async function armarCollage(files){
+  const bmps = await Promise.all(files.map(abrirBitmap));
+  const n = bmps.length, cols = 2, rows = Math.ceil(n / cols), t = 560;
+  const c = document.createElement('canvas'); c.width = cols * t; c.height = rows * t;
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+  bmps.forEach((b, k) => {
+    const x = (k % cols) * t, y = Math.floor(k / cols) * t, e = Math.max(t / b.width, t / b.height);
+    g.save(); g.beginPath(); g.rect(x + 3, y + 3, t - 6, t - 6); g.clip();
+    g.drawImage(b, x + (t - b.width * e) / 2, y + (t - b.height * e) / 2, b.width * e, b.height * e);
+    g.restore();
+  });
+  for (let q = .8; q >= .4; q -= .1){ const out = c.toDataURL('image/jpeg', q); if (out.length < 420000) return out; }
+  return c.toDataURL('image/jpeg', .4);
+}
+
+async function comprimir(file){
+  const bmp = await abrirBitmap(file);
+  const w0 = bmp.width, h0 = bmp.height;
+  let lado = 1100, out = '';
+  for (let intento = 0; intento < 4; intento++){
+    const k = Math.min(1, lado / Math.max(w0, h0));
+    const c = document.createElement('canvas');
+    c.width = Math.round(w0 * k); c.height = Math.round(h0 * k);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    for (let q = .72; q >= .38; q -= .1){
+      out = c.toDataURL('image/jpeg', q);
+      if (out.length < 420000) return out;
+    }
+    lado *= .7;
+  }
+  return out;
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  CASILLA (HOJA)  ////////////////////////
+//////////////////////////////////////////////////////////////*/
+function abrirCasilla(i){
+  const r = RETOS[i], c = cells[i], est = c.estado || 'vacia';
+  const estado = {
+    revision:  `<div class="status rev">${ico('clock')}<span>Ya me llegó. Lo reviso y te marco la casilla.</span></div>`,
+    aprobada:  `<div class="status ok">${ico('check')}<span>Aprobado, bien ahí.</span></div>`,
+    rechazada: `<div class="status no">${ico('alert')}<span>${c.mensaje ? esc(c.mensaje) : 'Falta algo, intentá de nuevo.'}</span></div>`,
+    vacia: ''
+  }[est];
+  const editable = est !== 'aprobada';
+  const multi = r.fotos || 1;
+
+  abrirModal(`
+    <div class="handle"></div>
+    <div class="sheet-head"><span class="chip">Reto ${i + 1}</span><button class="x" data-close aria-label="Cerrar">${ico('close')}</button></div>
+    <div class="sheet-ico">${kawaii(r.icono)}</div>
+    <h3>${esc(r.largo)}</h3>
+    ${r.fotos ? `<p class="muted">Mandame una foto de cada comida. Elegí las 4 juntas o sumalas de a una, y yo las armo en una sola.</p>` : ''}
+    ${estado}
+    ${r.resumen ? (editable
+      ? `<textarea class="input" id="resumen" rows="4" maxlength="900" placeholder="Contame qué leíste...">${esc(c.resumen || '')}</textarea>`
+      : (c.resumen ? `<p class="resumen">${esc(c.resumen)}</p>` : '')) : ''}
+    ${c.foto ? `<img class="proof" id="prev" src="${c.foto}" alt="Tu prueba">` : `<img class="proof" id="prev" alt="" hidden>`}
+    ${editable ? `
+      <label class="pick">${ico('image')}<span id="pick-txt">${c.foto ? (multi > 1 ? 'Cambiar fotos' : 'Cambiar foto') : (multi > 1 ? 'Elegir fotos' : 'Elegir foto')}</span>
+        <input type="file" accept="image/*" id="file" ${multi > 1 ? 'multiple ' : ''}hidden>
+      </label>
+      <button class="btn" id="send" disabled>${r.resumen ? 'Mandar' : 'Mandar foto'}</button>` : `<button class="btn soft" data-close>Cerrar</button>`}
+  `, 'sheet');
+
+  if (!editable) return;
+  let data = r.resumen ? (c.foto || null) : null, files = [];
+  const file = $('#file'), send = $('#send'), prev = $('#prev'), txt = $('#pick-txt'), res = $('#resumen');
+  const refrescar = () => { send.disabled = !(data && (!res || res.value.trim().length >= 15)); };
+  if (res) res.addEventListener('input', refrescar);
+  refrescar();
+  file.addEventListener('change', async () => {
+    const sel = [...file.files]; if (!sel.length) return;
+    txt.textContent = 'Preparando foto...'; send.disabled = true;
+    try {
+      if (multi > 1){
+        files = (files.length >= multi ? [] : files).concat(sel).slice(0, multi);
+        data = files.length > 1 ? await armarCollage(files) : await comprimir(files[0]);
+      } else data = await comprimir(sel[0]);
+      prev.src = data; prev.hidden = false;
+      prev.style.animation = 'none'; void prev.offsetWidth; prev.style.animation = '';
+      txt.textContent = multi > 1 ? (files.length < multi ? `Sumar otra foto (${files.length} de ${multi})` : `Cambiar fotos (${multi} de ${multi})`) : 'Cambiar foto';
+      refrescar();
+    } catch { txt.textContent = multi > 1 ? 'Elegir fotos' : 'Elegir foto'; toast('No se pudo leer esa imagen.'); }
+    file.value = '';
+  });
+  send.addEventListener('click', async () => {
+    if (!data) return;
+    send.disabled = true; send.textContent = 'Enviando...';
+    try {
+      await store.save(i, { estado:'revision', foto:data, mensaje:'', enviadoEn:Date.now(), ...(res ? { resumen:res.value.trim() } : {}) });
+      cerrarModal(); toast('Listo, ya me llegó.');
+    } catch { send.disabled = false; send.textContent = r.resumen ? 'Mandar' : 'Mandar foto'; toast('No se pudo enviar. Intentá de nuevo.'); }
+  });
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  CELEBRACION  ///////////////////////////
+//////////////////////////////////////////////////////////////*/
+function revisarCelebracion(){
+  if (esAdmin()) return;
+  const seen = getSeen();
+  const nuevas = LINEAS.filter(l => lineaCompleta(l) && !seen.includes(l.id));
+  const completo = aprobadas() === 9 && !seen.includes('full');
+  if (!nuevas.length && !completo) return;
+  setSeen([...seen, ...nuevas.map(l => l.id), ...(completo ? ['full'] : [])]);
+
+  const titulo = completo ? 'Lo completaste todo' : nuevas.length > 1 ? 'Te ganaste varios premios' : 'Te ganaste un premio';
+  const lista = [...nuevas, ...(completo ? [MAYOR] : [])].map((l, n) => `<div class="won-item" style="animation-delay:${.25 + n * .15}s"><div class="cup-box">${cuponSVG(l)}</div><button class="btn sm" data-dl="${l.id}">Descargar cupón</button></div>`).join('');
+  setTimeout(() => {
+    abrirModal(`
+      <div class="burst">${heartSolid}</div>
+      <h3>${titulo}</h3>
+      ${lista}
+      <p class="hint">Guardá los cupones y mostrámelos para canjearlos.</p>
+      <button class="btn" data-close>Cerrar</button>
+    `, 'dialog');
+    confeti(completo ? 190 : 110);
+    if (completo) setTimeout(() => confeti(120), 450);
+  }, prevEstados ? 650 : 900);
+}
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  PANEL DE APROBACION  ///////////////////
+//////////////////////////////////////////////////////////////*/
+function renderAdmin(forzar){
+  const root = $('#admin');
+  if (sessionStorage.getItem('bingo-admin') !== '1'){
+    if (root.dataset.vista === 'gate') return;
+    root.dataset.vista = 'gate';
+    root.innerHTML = `
+      <section class="gate">
+        <h2>Panel de aprobación</h2>
+        <form id="gate-form" autocomplete="off">
+          <input class="input" id="pin" type="password" inputmode="numeric" placeholder="PIN" aria-label="PIN">
+          <p class="err" id="pin-err"></p>
+          <button class="btn" type="submit">Entrar</button>
+        </form>
+      </section>`;
+    $('#gate-form').addEventListener('submit', e => {
+      e.preventDefault();
+      if ($('#pin').value === ADMIN_PIN){ sessionStorage.setItem('bingo-admin', '1'); adminSig = ''; renderAdmin(true); }
+      else { $('#pin-err').textContent = 'PIN incorrecto.'; $('#pin').value = ''; }
+    });
+    return;
+  }
+
+  const sig = cells.map(c => (c.estado || '') + (c.foto ? c.foto.length : 0) + (c.mensaje || '') + (c.resumen || '')).join('|') + JSON.stringify(canjeados);
+  if (!forzar && sig === adminSig && root.dataset.vista === 'panel') return;
+  adminSig = sig; root.dataset.vista = 'panel';
+
+  const orden = e => ({ revision:0, rechazada:2, aprobada:1, vacia:3 }[e || 'vacia']);
+  const idx = cells.map((c, i) => i).filter(i => (cells[i].estado || 'vacia') !== 'vacia').sort((a, b) => orden(cells[a].estado) - orden(cells[b].estado));
+  const pendientes = idx.filter(i => cells[i].estado === 'revision');
+  const vacias = 9 - idx.length;
+
+  const tarjeta = i => {
+    const c = cells[i], r = RETOS[i], est = c.estado;
+    const tag = { revision:['rev', 'En revisión'], aprobada:['ok', 'Aprobada'], rechazada:['no', 'Rechazada'] }[est];
+    let acciones = '';
+    if (est === 'revision'){
+      acciones = rejecting.has(i)
+        ? `<div class="reject-box"><input class="input" data-msg="${i}" placeholder="Mensajito (opcional): falta la foto de la botella" value="${esc(drafts[i] || '')}">
+             <div class="item-actions"><button class="btn sm" data-no="${i}">Enviar rechazo</button><button class="btn sm soft" data-cancel="${i}">Cancelar</button></div></div>`
+        : `<div class="item-actions"><button class="btn sm" data-ok="${i}">Aprobar</button><button class="btn sm soft" data-rej="${i}">Rechazar</button></div>`;
+    } else if (est === 'aprobada'){
+      acciones = `<div class="item-actions"><button class="btn sm soft" data-undo="${i}">Quitar aprobación</button></div>`;
+    }
+    return `<article class="item">
+      <div class="item-top">
+        ${c.foto ? `<img class="thumb" data-zoom="${i}" src="${c.foto}" alt="Prueba">` : `<div class="thumb"></div>`}
+        <div class="item-info"><b>${i + 1}. ${esc(r.largo)}</b><small>Prueba: ${esc(r.prueba)}</small><span class="tag ${tag[0]}">${tag[1]}</span></div>
+      </div>${c.resumen ? `<p class="resumen">${esc(c.resumen)}</p>` : ''}${acciones}</article>`;
+  };
+  const ganados = CUPONES.filter(l => l.id === 'mayor' ? aprobadas() === 9 : lineaCompleta(l));
+  const tCup = l => {
+    const ca = !!canjeados[l.id];
+    return `<article class="item"><div class="item-top"><div class="cup-mini">${cuponSVG(l, { canjeado: ca })}</div>
+      <div class="item-info"><b>${esc(l.nombre)}</b><small>${esc(l.premio)}</small><span class="tag ${ca ? 'ok' : 'rev'}">${ca ? 'Canjeado' : 'Sin canjear'}</span></div></div>
+      <div class="item-actions"><button class="btn sm${ca ? ' soft' : ''}" data-canje="${l.id}" data-v="${ca ? 0 : 1}">${ca ? 'Deshacer canje' : 'Marcar como canjeado'}</button></div></article>`;
+  };
+
+  root.innerHTML = `
+    <div class="adm-head"><h2>Panel</h2><span>${aprobadas()} de 9 aprobadas</span></div>
+    <div class="adm-group">POR REVISAR (${pendientes.length})</div>
+    ${pendientes.length ? pendientes.map(tarjeta).join('') : `<div class="empty">No hay pruebas pendientes.</div>`}
+    ${idx.length > pendientes.length ? `<div class="adm-group">RESTO</div>${idx.filter(i => !pendientes.includes(i)).map(tarjeta).join('')}` : ''}
+    ${ganados.length ? `<div class="adm-group">CUPONES GANADOS (${ganados.length})</div>${ganados.map(tCup).join('')}` : ''}
+    <p class="demo-tag" style="text-align:left">${vacias ? `${vacias} casilla${vacias > 1 ? 's' : ''} sin prueba todavía.` : ''}</p>
+    <a class="back-link" href="#">Ver como ella</a>`;
+}
+
+$('#admin').addEventListener('click', async e => {
+  const t = e.target.closest('[data-ok],[data-rej],[data-no],[data-cancel],[data-undo],[data-zoom],[data-canje]');
+  if (!t) return;
+  const g = k => t.dataset[k] !== undefined ? +t.dataset[k] : null;
+  try {
+    if (t.dataset.canje){ await store.canje(t.dataset.canje, t.dataset.v === '1'); toast(t.dataset.v === '1' ? 'Marcado como canjeado.' : 'Canje deshecho.'); return; }
+    if (g('ok') !== null){ await store.update(g('ok'), { estado:'aprobada', mensaje:'' }); toast('Aprobada.'); }
+    else if (g('rej') !== null){ rejecting.add(g('rej')); renderAdmin(true); const el = $(`[data-msg="${g('rej')}"]`); el && el.focus(); }
+    else if (g('cancel') !== null){ rejecting.delete(g('cancel')); renderAdmin(true); }
+    else if (g('no') !== null){
+      const i = g('no'); const m = (drafts[i] || '').trim();
+      rejecting.delete(i); delete drafts[i];
+      await store.update(i, { estado:'rechazada', mensaje:m }); toast('Rechazada.');
+    }
+    else if (g('undo') !== null){ await store.update(g('undo'), { estado:'revision' }); }
+    else if (g('zoom') !== null){ abrirModal(`<img src="${cells[g('zoom')].foto}" alt="Prueba" data-close>`, 'photo'); }
+  } catch { toast('No se pudo guardar. Intentá de nuevo.'); }
+});
+$('#admin').addEventListener('input', e => {
+  if (e.target.dataset.msg !== undefined) drafts[+e.target.dataset.msg] = e.target.value;
+});
+
+/*//////////////////////////////////////////////////////////////
+//////////////////////  RUTAS Y ARRANQUE  //////////////////////
+//////////////////////////////////////////////////////////////*/
+function ruta(){
+  const admin = esAdmin();
+  $('#player').hidden = admin;
+  $('#admin').hidden = !admin;
+  document.title = admin ? 'Panel · Bingo' : 'Bingo para mi amor';
+  if (admin) renderAdmin(true); else { pintarTablero(); pintarPremios(); }
+  scrollTo(0, 0);
+}
+addEventListener('hashchange', () => { cerrarModal(); ruta(); if (!esAdmin()) revisarCelebracion(); });
+
+function alRecibir(datos){
+  cells = Array.from({ length:9 }, (_, i) => ({ estado:'vacia', ...(datos[i] || {}) }));
+  if (!esAdmin()){ pintarTablero(); pintarPremios(); }
+  renderAdmin();
+  revisarCelebracion();
+  prevEstados = cells.map(c => c.estado);
+}
+
+function alRecibirCupones(m){
+  canjeados = m || {};
+  if (!esAdmin()) pintarPremios();
+  renderAdmin();
+}
+
+(async function iniciar(){
+  $$('[data-svg]').forEach(el => { el.innerHTML = DECO[el.dataset.svg] || ''; });
+  construirTablero();
+  construirPremios();
+  $('#demo-tag').hidden = !modoDemo;
+  ruta();
+  try { store = modoDemo ? crearStoreDemo() : await crearStoreFirebase(); }
+  catch { toast('No se pudo conectar con la base de datos.'); return; }
+  store.subscribe(alRecibir, alRecibirCupones);
+})();
+</script>
+</body>
+</html>
